@@ -26,9 +26,9 @@
                             <div class="layui-input-block">
                                 <select name="readmode" lay-filter="aihao">
                                     <option value="">Please Set Read Mode</option>
-                                    <option value="0"selected="">master</option>
-                                    <option value="1" >slave</option>
-                                    <option value="2" >master and slave</option>
+                                    <option value="master"selected="">master</option>
+                                    <option value="slave" >slave</option>
+                                    <option value="master_slave" >master and slave</option>
                                 </select>
                             </div>
                         </div>
@@ -38,8 +38,8 @@
                             <div class="layui-input-block">
                                 <select name="persistence" lay-filter="aihao">
                                     <option value="">Please Set Redis Persistence Mode</option>
-                                    <option value="0"selected="">RDB</option>
-                                    <option value="1" >AOF</option>
+                                    <option value="RDB"selected="">RDB</option>
+                                    <option value="AOF" >AOF</option>
                                 </select>
                             </div>
                         </div>
@@ -49,9 +49,9 @@
                             <div class="layui-input-block">
                                 <select name="website" lay-filter="aihao">
                                     <option value="">Please Select A Website</option>
-                                    <option value="0"selected="">Twitter</option>
-                                    <option value="1" >Amazon</option>
-                                    <option value="2" >Flickr</option>
+                                    <option value="Twitter"selected="">Twitter</option>
+                                    <option value="Amazon" >Amazon</option>
+                                    <option value="Flickr" >Flickr</option>
                                 </select>
                             </div>
                         </div>
@@ -69,10 +69,10 @@
                             <div class="layui-input-block">
                                 <select name="consistency" lay-filter="aihao">
                                     <option value="">Please Select A Consistency Semantic</option>
-                                    <option value="0"selected="">Read Your Write</option>
-                                    <option value="1" >Monotonic Read</option>
-                                    <option value="2" >Monotonic Write</option>
-                                    <option value="3" >Write Follow Read</option>
+                                    <option value="RYW"selected="">Read Your Write</option>
+                                    <option value="MR" >Monotonic Read</option>
+                                    <option value="MW" >Monotonic Write</option>
+                                    <option value="WFR" >Write Follow Read</option>
                                 </select>
                             </div>
                         </div>
