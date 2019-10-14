@@ -4,17 +4,23 @@ import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.PumpStreamHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 
 @Controller
-@RequestMapping("/cmd")
+//@RequestMapping("/cmd")
 public class CommandController
 {
+    private static final Logger logger = LoggerFactory.getLogger(CommandController.class);
+
     @GetMapping("/pwd")
     //@ResponseBody
     public String pwd(Model model)
@@ -43,5 +49,14 @@ public class CommandController
             e.printStackTrace();
             return e.getMessage();
         }
+    }
+
+    @GetMapping(value="/database/habse/cmd")
+    public String hbase(@RequestParam("website") String website,
+                        @RequestParam("count") String count,
+                        @RequestParam("consistency") String consistency)
+    {
+        logger.info(website+","+count+","+consistency);
+        return "hbase";
     }
 }
