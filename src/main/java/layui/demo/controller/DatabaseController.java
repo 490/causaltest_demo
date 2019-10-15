@@ -9,40 +9,51 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/database")
 public class DatabaseController
 {
-    @GetMapping("/cassandra")
+    @RequestMapping("/cassandra")
     //@ResponseBody
     public String cassandra()
     {
         return "cassandra";
     }
-    @GetMapping("/hbase")
+    @RequestMapping("/hbase")
     //@ResponseBody
     public String hbase()
     {
         return "hbase";
     }
-    @GetMapping("/mongo")
+    @RequestMapping("/mongo")
     //@ResponseBody
     public String mongo()
     {
         return "mongo";
     }
-    @GetMapping("/mysql")
+    @RequestMapping("/mysql")
     //@ResponseBody
     public String mysql()
     {
         return "mysql";
     }
-    @GetMapping("/postgres")
+    @RequestMapping("/postgres")
     //@ResponseBody
     public String postgres()
     {
         return "postgres";
     }
-    @GetMapping("/redis")
+    @RequestMapping("/redis")
     //@ResponseBody
     public String redis()
     {
         return "redis";
     }
 }
+/*
+*
+$.ajax({
+                                    url: '/database/habse/cmd',
+                                    async:false,
+
+                                    success: function(data){
+                                        console.log(data);
+                                    }
+                                });
+* */

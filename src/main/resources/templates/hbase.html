@@ -19,9 +19,8 @@
                     </fieldset>
 
 
-                    <form class="layui-form" action="/database/habse/cmd">
 
-
+                    <form class="layui-form" action="">
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">Website</label>
@@ -61,13 +60,13 @@
                             <div class="layui-input-block">
                                 <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">Submit</button>
                                 <button type="reset" class="layui-btn layui-btn-primary">Reset</button>
+                                <button type="button" class="layui-btn layui-btn-warm" lay-filter="run">Run</button>
                             </div>
                         </div>
                     </form>
 
 
                     <script>
-
                         layui.use(['form', 'layedit', 'laydate'], function(){
                             var form = layui.form
                                 ,layer = layui.layer
@@ -75,7 +74,6 @@
                                 ,laydate = layui.laydate;
 
                             //日期
-                            form.render();
                             laydate.render({
                                 elem: '#date'
                             });
@@ -113,9 +111,16 @@
                             //监听提交
                             form.on('submit(demo1)', function(data){
 
-                                var d =  data.field;
-                                var url = "/cmd/database/hbase";
-                                return url;
+                                $.ajax({
+                                    url: '/database/hbase/cmd',
+                                    data:data,
+                                    dataType:'json',
+                                    type:'post',
+                                    success: function(data){
+                                    }
+
+                                });
+                                return false;
                             });
 
                             //表单赋值
