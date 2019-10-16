@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -28,12 +29,14 @@ public class CassandraController {
                             @RequestParam("count") String count,
                             @RequestParam("consistency") String consistency,
                             @RequestParam("wcl") String wcl,
-                            @RequestParam("rcl") String rcl)
+                            @RequestParam("rcl") String rcl,
+                            @RequestParam("keyspace") String keyspace)
     {
         logger.info(website+","+count+","+consistency);
+        if(website!=null && count != null && consistency !=null)
         configFile.setConfig(website,count,consistency,"Cassandra",wcl,rcl);
         logger.info("set conf file completed.");
-        return "hbase";
+        return "cassandra";
     }
 
 

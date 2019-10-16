@@ -22,6 +22,7 @@ public class MongodbController
                             @RequestParam("consistency") String consistency)
     {
         logger.info(website+","+count+","+consistency);
+        if(website!=null && count != null && consistency !=null)
         configFile.setConfig(website,count,consistency,"Mongodb");
         logger.info("set conf file completed.");
         return "mongodb";

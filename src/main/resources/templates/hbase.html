@@ -20,7 +20,7 @@
 
 
 
-                    <form class="layui-form" action="">
+                    <form class="layui-form" action="" lay-filter="example">
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">Website</label>
@@ -58,12 +58,14 @@
 
                         <div class="layui-form-item">
                             <div class="layui-input-block">
-                                <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">Submit</button>
+                                <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1" >Save</button>
                                 <button type="reset" class="layui-btn layui-btn-primary">Reset</button>
                                 <button type="button" class="layui-btn layui-btn-warm" lay-filter="run">Run</button>
+
                             </div>
                         </div>
                     </form>
+                    <script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>
 
 
                     <script>
@@ -110,17 +112,14 @@
 
                             //监听提交
                             form.on('submit(demo1)', function(data){
-
                                 $.ajax({
-                                    url: '/database/hbase/cmd',
-                                    data:data,
-                                    dataType:'json',
-                                    type:'post',
+                                    url: '/database/habse',
+                                    async:false,
+
                                     success: function(data){
                                     }
-
                                 });
-                                return false;
+                                layer.msg("save success !",{icon:6});
                             });
 
                             //表单赋值
@@ -141,6 +140,7 @@
                                 var data = form.val('example');
                                 alert(JSON.stringify(data));
                             });
+
 
                         });
                     </script>

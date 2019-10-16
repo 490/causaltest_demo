@@ -59,7 +59,7 @@
 
                         <div class="layui-form-item">
                             <div class="layui-input-block">
-                                <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">Submit</button>
+                                <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">Save</button>
                                 <button type="reset" class="layui-btn layui-btn-primary">Reset</button>
                             </div>
                         </div>
@@ -110,10 +110,14 @@
 
                             //监听提交
                             form.on('submit(demo1)', function(data){
-                                layer.alert(JSON.stringify(data.field), {
-                                    title: '最终的提交信息'
-                                })
-                                return false;
+                                $.ajax({
+                                    url: '/database/postgres',
+                                    async:false,
+
+                                    success: function(data){
+                                    }
+                                });
+                                layer.msg("save success !",{icon:6});
                             });
 
                             //表单赋值

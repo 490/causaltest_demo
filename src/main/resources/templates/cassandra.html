@@ -48,7 +48,7 @@
                         </div>
                     </div-->
 
-                    <form class="layui-form" action="/cmd">
+                    <form class="layui-form" action="">
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">Keyspace</label>
@@ -145,7 +145,7 @@
                         </div>-->
                         <div class="layui-form-item">
                             <div class="layui-input-block">
-                                <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">Submit</button>
+                                <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">Save</button>
                                 <button type="reset" class="layui-btn layui-btn-primary">Reset</button>
                                 <button type="button" class="layui-btn layui-btn-warm" lay-filter="run">Run</button>
                             </div>
@@ -197,10 +197,14 @@
 
                             //监听提交
                             form.on('submit(demo1)', function(data){
-                                layer.alert(JSON.stringify(data.field), {
-                                    title: '最终的提交信息'
-                                })
-                                return false;
+                                $.ajax({
+                                    url: '/database/cassandra',
+                                    async:false,
+
+                                    success: function(data){
+                                    }
+                                });
+                                layer.msg("save success !",{icon:6});
                             });
 
                             //表单赋值

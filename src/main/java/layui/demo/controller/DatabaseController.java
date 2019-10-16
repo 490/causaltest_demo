@@ -15,7 +15,7 @@ public class DatabaseController
     {
         return "cassandra";
     }
-    @RequestMapping("/hbase")
+   // @RequestMapping("/hbase")
     //@ResponseBody
     public String hbase()
     {

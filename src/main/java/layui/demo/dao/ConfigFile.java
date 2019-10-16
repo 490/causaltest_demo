@@ -1,5 +1,8 @@
 package layui.demo.dao;
 
+import layui.demo.controller.CommandController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -8,6 +11,7 @@ import java.io.*;
 public class ConfigFile
 {
     String path="/home/zl/Documents/test/conf.properties";
+    private static final Logger logger = LoggerFactory.getLogger(ConfigFile.class);
 
     //cassandra
     public void setConfig(String website,String count,String consistency,String database,String wcl,String rcl)
@@ -297,7 +301,7 @@ public class ConfigFile
 
     }
 
-    //redis
+    //normal
     public void setConfig(String website,String count,String consistency,String database)
 
     {
@@ -358,6 +362,7 @@ public class ConfigFile
                 }
             }
         }
+        //logger.info(bufAll.toString());
         BufferedWriter bw = null;
         try
         {

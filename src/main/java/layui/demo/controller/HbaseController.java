@@ -24,13 +24,14 @@ public class HbaseController
     private static final Logger logger = LoggerFactory.getLogger(CommandController.class);
     //String path = "/data/zhaole/causaltest/causalwebserver/src/main/resources/conf.properties";
     String path="/home/zl/Documents/test/conf.properties";
-    @RequestMapping(value="/database/habse")
-    public String hbase(@RequestParam("website") String website,
-                        @RequestParam("count") String count,
-                        @RequestParam("consistency") String consistency,
+    @RequestMapping(value="/database/hbase")
+    public String hbase(@RequestParam(value = "website",required = false) String website,
+                        @RequestParam(value = "count",required = false) String count,
+                        @RequestParam(value = "consistency",required = false) String consistency,
                         Model model)
     {
-        configFile.setConfig(website,count,consistency,"Hbase");
+        if(website!=null && count != null && consistency !=null)
+             configFile.setConfig(website,count,consistency,"Hbase");
         String result = website+","+count+","+consistency+"---set conf file completed.";
         logger.info(result);
         model.addAttribute("result",result);

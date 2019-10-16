@@ -23,6 +23,7 @@ public class PostgresController
                             @RequestParam("consistency") String consistency)
     {
         logger.info(website+","+count+","+consistency);
+        if(website!=null && count != null && consistency !=null)
         configFile.setConfig(website,count,consistency,"Postgresxl");
         logger.info("set conf file completed.");
         return "postgres";
