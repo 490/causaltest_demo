@@ -27,8 +27,9 @@ public class CommandController
     //@ResponseBody
     public String pwd(Model model)
     {
+        logger.info("enter pwd");
         try {
-            String command = "vim ";
+            String command = "pwd ";
             //接收正常结果流
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             //接收异常结果流
@@ -45,12 +46,24 @@ public class CommandController
             //不同操作系统注意编码，否则结果乱码
             String out = outputStream.toString("utf-8");
             String error = errorStream.toString("utf-8");
-            model.addAttribute("pwdresult",out+error);
-            return "cassandra";
+            model.addAttribute("pwd",out);
+            logger.info(out+error);
+            return "hbase";
         } catch (Exception e) {
             e.printStackTrace();
             return e.getMessage();
         }
+    }
+    @RequestMapping("/test")
+    //@ResponseBody
+    public String pwd(Model model,@RequestParam(value = "name",required = false) String name)
+    {
+        if(name!=null)
+        {
+            logger.info(name + ".");
+            model.addAttribute("msg", name);
+        }
+        return "hbase";
     }
 
 

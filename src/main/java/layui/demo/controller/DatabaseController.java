@@ -6,10 +6,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/database")
 public class DatabaseController
 {
-    @RequestMapping("/cassandra")
+    @RequestMapping("/")
+    public String index()
+    {
+        return "home";
+    }
+//@RequestMapping("/cassandra")
     //@ResponseBody
     public String cassandra()
     {
@@ -21,25 +25,25 @@ public class DatabaseController
     {
         return "hbase";
     }
-    @RequestMapping("/mongo")
+    //@RequestMapping("/mongo")
     //@ResponseBody
     public String mongo()
     {
         return "mongo";
     }
-    @RequestMapping("/mysql")
+    //@RequestMapping("/mysql")
     //@ResponseBody
     public String mysql()
     {
         return "mysql";
     }
-    @RequestMapping("/postgres")
+   // @RequestMapping("/postgres")
     //@ResponseBody
     public String postgres()
     {
         return "postgres";
     }
-    @RequestMapping("/redis")
+    //@RequestMapping("/redis")
     //@ResponseBody
     public String redis()
     {

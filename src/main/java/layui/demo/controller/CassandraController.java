@@ -25,12 +25,12 @@ public class CassandraController {
 
 
     @RequestMapping(value="/database/cassandra")
-    public String cassandra(@RequestParam("website") String website,
-                            @RequestParam("count") String count,
-                            @RequestParam("consistency") String consistency,
-                            @RequestParam("wcl") String wcl,
-                            @RequestParam("rcl") String rcl,
-                            @RequestParam("keyspace") String keyspace)
+    public String cassandra(@RequestParam(value = "website",required = false) String website,
+                            @RequestParam(value = "count",required = false) String count,
+                            @RequestParam(value = "consistency",required = false) String consistency,
+                            @RequestParam(value = "wcl",required = false) String wcl,
+                            @RequestParam(value = "rcl",required = false) String rcl,
+                            @RequestParam(value = "keyspace",required = false) String keyspace)
     {
         logger.info(website+","+count+","+consistency);
         if(website!=null && count != null && consistency !=null)

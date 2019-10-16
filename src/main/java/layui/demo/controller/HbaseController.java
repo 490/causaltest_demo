@@ -31,14 +31,17 @@ public class HbaseController
                         Model model)
     {
         if(website!=null && count != null && consistency !=null)
-             configFile.setConfig(website,count,consistency,"Hbase");
-        String result = website+","+count+","+consistency+"---set conf file completed.";
-        logger.info(result);
-        model.addAttribute("result",result);
+        {
+            configFile.setConfig(website,count,consistency,"Hbase");
+            String result = "Website=["+website+"], Test times=["+count+"], Consistency=["+consistency+"]";
+            logger.info(result);
+            model.addAttribute("result",result);
+        }
+
         return "hbase";
     }
 
-    @RequestMapping(value="/database/habse/run")
+    @RequestMapping(value="/database/hbase/run")
     public String run(Model model)
     {
         try {

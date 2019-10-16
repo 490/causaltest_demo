@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:required="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+
 <!--head部分-->
 <head th:include="layout :: htmlhead" th:with="title='CausalTest Management'">
 </head>
@@ -20,7 +21,7 @@
 
 
 
-                    <form class="layui-form" action="" lay-filter="example">
+                    <!--form class="layui-form" action="" lay-filter="example">
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">Website</label>
@@ -60,12 +61,80 @@
                             <div class="layui-input-block">
                                 <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1" >Save</button>
                                 <button type="reset" class="layui-btn layui-btn-primary">Reset</button>
-                                <button type="button" class="layui-btn layui-btn-warm" lay-filter="run">Run</button>
+                                <button type="submit" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="run">Run</button>
+                            </div>
+                        </div>
+                    </form-->
+                    <form class="form-horizontal" role="form" action="/database/hbase" method="get">
+                        <div class="form-group" >
+                            <label for="website" class="col-sm-2 control-label">Website</label>
+                            <div class="col-md-6">
+                            <select class="form-control" name="website" id="website">
+                                <option value="" disabled selected hidden>Please Select A Website</option>
+                                <option value="Twitter"selected="">Twitter</option>
+                                <option value="Amazon" >Amazon</option>
+                                <option value="Flickr" >Flickr</option>
+                            </select>
+                            </div>
+                        </div>
 
+                        <div class="form-group">
+                            <label for="count" class="col-sm-2 control-label">TestTimes</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="count" required pattern="\d*" name="count"
+                                       placeholder="Times to execute test, e.g. 100000">
+                            </div>
+                        </div>
+
+                        <div class="form-group" >
+                            <label for="consistency" class="col-sm-2 control-label">Consistency</label>
+                            <div class="col-md-6">
+                            <select class="form-control" name="consistency" id="consistency">
+                                <option value="" disabled selected hidden>Please Select A Consistency Semantic</option>
+                                <option value="RYW"selected="">Read Your Write</option>
+                                <option value="MR" >Monotonic Read</option>
+                                <option value="MW" >Monotonic Write</option>
+                                <option value="WFR" >Write Follow Read</option>
+                            </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-6">
+                                <button type="submit" class="btn  btn-danger" >Save</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <form class="form-horizontal" role="form" action="/database/hbase/run" >
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Current configuration
+
+                            </div>
+                            <div class="panel-body">
+                                <span th:text="${result}"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-success btn-lg btn-block" >Run</button>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Result
+                            </div>
+                            <div class="panel-body">
+                                <span th:text="${pwdresult}"></span>
                             </div>
                         </div>
                     </form>
-                    <script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>
+
+
 
 
                     <script>
@@ -112,6 +181,7 @@
 
                             //监听提交
                             form.on('submit(demo1)', function(data){
+                                async:false
                                 $.ajax({
                                     url: '/database/habse',
                                     async:false,
@@ -119,9 +189,13 @@
                                     success: function(data){
                                     }
                                 });
-                                layer.msg("save success !",{icon:6});
-                            });
+                                layer.msg(data.field,{icon:6});
 
+                            });
+                            form.on('submit(run)', function(data){
+
+                                });
+                            });
                             //表单赋值
                             layui.$('#LAY-component-form-setval').on('click', function(){
                                 form.val('example', {
