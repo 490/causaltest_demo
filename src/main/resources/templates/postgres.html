@@ -19,7 +19,7 @@
                     </fieldset>
 
 
-                    <form class="layui-form" action="">
+                    <!--form-- class="layui-form" action="">
 
 
 
@@ -63,8 +63,75 @@
                                 <button type="reset" class="layui-btn layui-btn-primary">Reset</button>
                             </div>
                         </div>
+                    </form-->
+                    <form class="form-horizontal" role="form" action="/database/postgres" method="get">
+                        <div class="form-group" >
+                            <label for="website" class="col-sm-2 control-label">Website</label>
+                            <div class="col-md-6">
+                                <select class="form-control" name="website" id="website">
+                                    <option value="" disabled selected hidden>Please Select A Website</option>
+                                    <option value="Twitter"selected="">Twitter</option>
+                                    <option value="Amazon" >Amazon</option>
+                                    <option value="Flickr" >Flickr</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="count" class="col-sm-2 control-label">TestTimes</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="count" required pattern="\d*" name="count"
+                                       placeholder="Times to execute test, e.g. 100000">
+                            </div>
+                        </div>
+
+                        <div class="form-group" >
+                            <label for="consistency" class="col-sm-2 control-label">Consistency</label>
+                            <div class="col-md-6">
+                                <select class="form-control" name="consistency" id="consistency">
+                                    <option value="" disabled selected hidden>Please Select A Consistency Semantic</option>
+                                    <option value="RYW"selected="">Read Your Write</option>
+                                    <option value="MR" >Monotonic Read</option>
+                                    <option value="MW" >Monotonic Write</option>
+                                    <option value="WFR" >Write Follow Read</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-6">
+                                <button type="submit" class="btn  btn-danger" >Save</button>
+                            </div>
+                        </div>
+
                     </form>
 
+                    <form class="form-horizontal" role="form" action="/database/postgres/run" >
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Current configuration
+
+                            </div>
+                            <div class="panel-body">
+                                <span th:text="${result}"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-success btn-lg btn-block" >Run</button>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Result
+                            </div>
+                            <div class="panel-body">
+                                <span th:text="${pwdresult}"></span>
+                            </div>
+                        </div>
+                    </form>
 
                     <script>
                         layui.use(['form', 'layedit', 'laydate'], function(){

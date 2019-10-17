@@ -30,12 +30,16 @@ public class CassandraController {
                             @RequestParam(value = "consistency",required = false) String consistency,
                             @RequestParam(value = "wcl",required = false) String wcl,
                             @RequestParam(value = "rcl",required = false) String rcl,
-                            @RequestParam(value = "keyspace",required = false) String keyspace)
+                            @RequestParam(value = "keyspace",required = false) String keyspace,
+                            Model model)
     {
-        logger.info(website+","+count+","+consistency);
         if(website!=null && count != null && consistency !=null)
-        configFile.setConfig(website,count,consistency,"Cassandra",wcl,rcl);
-        logger.info("set conf file completed.");
+        {
+            configFile.setConfig(website,count,consistency,"Cassandra",wcl,rcl);
+            String result = "Website=["+website+"], Test times=["+count+"], Consistency=["+consistency+"]";
+            logger.info(result);
+            model.addAttribute("result",result);
+        }
         return "cassandra";
     }
 
@@ -63,7 +67,7 @@ public class CassandraController {
             String error = errorStream.toString("utf-8");
             model.addAttribute("pwdresult",out+error);
             logger.info(out);
-            return "hbase";
+            return "cassandra";
         } catch (Exception e) {
             e.printStackTrace();
             return e.getMessage();
