@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -40,12 +41,18 @@ public class HbaseController
 
         return "hbase";
     }
-
+    @RequestMapping("/database/hbase/crash")
+    public String del(@RequestParam(name="id") String id)
+    {
+        logger.info(id);
+        return "hbase";
+    }
     @RequestMapping(value="/database/hbase/run")
     public String run(Model model)
     {
-        try {
-            String command = "pwd ";
+        //./data/zhaole/causaltest/bin/runtest.sh
+      /*  try {
+            String command = "ping 192.168.3.129 ";
             //接收正常结果流
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             //接收异常结果流
@@ -68,6 +75,14 @@ public class HbaseController
         } catch (Exception e) {
             e.printStackTrace();
             return e.getMessage();
-        }
+        }*/
+
+      for(int i = 0;i<1000000;i++)
+      {
+          model.addAttribute("pwdresult",i+"\n");
+          logger.info(i+"");
+
+      }
+        return "hbase::table_refresh";
     }
 }

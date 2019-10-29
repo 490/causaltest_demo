@@ -180,7 +180,7 @@
 
                     </form>
 
-                    <form class="form-horizontal" role="form" action="/database/mongodb/run" >
+                    <form class="form-horizontal" role="form" action="" >
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 Current configuration
@@ -193,21 +193,65 @@
 
                         <div class="form-group">
                             <div class="col-md-12">
-                                <button type="submit" class="btn btn-success btn-lg btn-block" >Run</button>
+                                <!--button type="submit" class="btn btn-success btn-lg btn-block" >Run</button-->
+                                <button  type="button" onclick="myRun()" class="btn  btn-success btn-lg btn-block">Run</button>
                             </div>
                         </div>
+
+                        <div class="btn-group">
+                            <button id="btn2" type="button" onclick="myfun1()" class="btn btn-default">Kill Node</button>
+                            <button id="btn3" type="button" onclick="myfun2()" class="btn btn-default">Kill Node and Recover</button>
+                        </div>
+
+
 
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 Result
                             </div>
-                            <div class="panel-body">
-                                <span th:text="${pwdresult}"></span>
+
+                            <div id="table_refresh" style="height:400px;overflow:auto; position: relative;weight:1200px" th:fragment="table_refresh"
+                                 data-spy="scroll" data-target="#navbar-example" data-offset="0">
+                                <span th:text="${pwdresult}" ></span>
                             </div>
+
                         </div>
                     </form>
-
                     <script>
+
+
+                        function myfun2() {
+                            $.ajax({
+                                type:"get",
+                                url:"/database/mongodb/crash?id=2",
+                                success:function (data) {
+                                    alert("success");
+                                },
+                                error:function () {
+                                    alert("error");
+                                }
+                            });
+                        }
+                        function myfun1() {
+                            $.ajax({
+                                type:"get",
+                                url:"/database/mongodb/crash?id=1",
+                                success:function (data) {
+                                    alert("success");
+                                },
+                                error:function () {
+                                    alert("error");
+                                }
+                            });
+                        }
+                        function myRun() {
+
+                            $('#table_refresh').load("/database/mongodb/run");
+
+                        }
+                    </script>
+
+                    <!--script>
                         layui.use(['form', 'layedit', 'laydate'], function(){
                             var form = layui.form
                                 ,layer = layui.layer
@@ -281,7 +325,7 @@
                             });
 
                         });
-                    </script>
+                    </script-->
 
 
 

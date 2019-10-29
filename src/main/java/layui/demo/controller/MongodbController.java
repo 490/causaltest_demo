@@ -36,7 +36,7 @@ public class MongodbController
             logger.info(result);
             model.addAttribute("result",result);
         }
-        return "mongodb";
+        return "mongo";
     }
     @RequestMapping(value="/database/mongodb/run")
     public String run(Model model)

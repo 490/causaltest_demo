@@ -107,7 +107,8 @@
 
                     </form>
 
-                    <form class="form-horizontal" role="form" action="/database/hbase/run" >
+                    <form class="form-horizontal" role="form" action="">
+                    <!--form class="form-horizontal" role="form" action="/database/hbase/run"-->
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 Current configuration
@@ -120,104 +121,110 @@
 
                         <div class="form-group">
                             <div class="col-md-12">
-                                <button type="submit" class="btn btn-success btn-lg btn-block" >Run</button>
+                                <!--button type="submit" class="btn btn-success btn-lg btn-block" >Run</button-->
+                                <button  type="button" onclick="myRun()" class="btn  btn-success btn-lg btn-block">Run</button>
                             </div>
                         </div>
+
+                        <div class="btn-group">
+                            <button id="btn1" type="button" onclick="myfun1()" class="btn btn-default">Kill Master</button>
+                            <button id="btn2" type="button" onclick="myfun2()" class="btn btn-default">Kill Slave</button>
+                            <button id="btn3" type="button" onclick="myfun3()" class="btn btn-default">Kill Master and Recover</button>
+                            <button id="btn4" type="button" onclick="myfun4()" class="btn btn-default">Kill Slave and Recover</button>
+                        </div>
+
+
 
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 Result
                             </div>
-                            <div class="panel-body">
-                                <span th:text="${pwdresult}"></span>
+
+                            <div id="table_refresh" style="height:400px;overflow:auto; position: relative;weight:1200px" th:fragment="table_refresh"
+                                 data-spy="scroll" data-target="#navbar-example" data-offset="0">
+                                <span th:text="${pwdresult}" ></span>
                             </div>
+
                         </div>
                     </form>
 
 
 
 
+
                     <script>
-                        layui.use(['form', 'layedit', 'laydate'], function(){
-                            var form = layui.form
-                                ,layer = layui.layer
-                                ,layedit = layui.layedit
-                                ,laydate = layui.laydate;
 
-                            //日期
-                            laydate.render({
-                                elem: '#date'
-                            });
-                            laydate.render({
-                                elem: '#date1'
-                            });
-
-                            //创建一个编辑器
-                            var editIndex = layedit.build('LAY_demo_editor');
-
-                            //自定义验证规则
-                            form.verify({
-                                title: function(value){
-                                    if(value.length < 5){
-                                        return '标题至少得5个字符啊';
-                                    }
-                                }
-                                ,pass: [
-                                    /^[\S]{6,12}$/
-                                    ,'密码必须6到12位，且不能出现空格'
-                                ]
-                                ,content: function(value){
-                                    layedit.sync(editIndex);
-                                }
-                            });
-
-                            //监听指定开关
-                            form.on('switch(switchTest)', function(data){
-                                layer.msg('开关checked：'+ (this.checked ? 'true' : 'false'), {
-                                    offset: '6px'
-                                });
-                                layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
-                            });
-
-                            //监听提交
-                            form.on('submit(demo1)', function(data){
-                                async:false
+                            function myfun4() {
                                 $.ajax({
-                                    url: '/database/habse',
-                                    async:false,
-
-                                    success: function(data){
+                                    type:"get",
+                                    url:"/database/hbase/crash?id=4",
+                                    success:function (data) {
+                                        alert("success");
+                                    },
+                                    error:function () {
+                                        alert("error");
                                     }
                                 });
-                                layer.msg(data.field,{icon:6});
-
-                            });
-                            form.on('submit(run)', function(data){
-
+                            }
+                            function myfun3() {
+                                $.ajax({
+                                    type:"get",
+                                    url:"/database/hbase/crash?id=3",
+                                    success:function (data) {
+                                        alert("success");
+                                    },
+                                    error:function () {
+                                        alert("error");
+                                    }
                                 });
-                            });
-                            //表单赋值
-                            layui.$('#LAY-component-form-setval').on('click', function(){
-                                form.val('example', {
-                                    "username": "贤心" // "name": "value"
-                                    ,"password": "123456"
-                                    ,"interest": 1
-                                    ,"like[write]": true //复选框选中状态
-                                    ,"close": true //开关状态
-                                    ,"sex": "女"
-                                    ,"desc": "我爱 layui"
+                            }
+                            function myfun2() {
+                                $.ajax({
+                                    type:"get",
+                                    url:"/database/hbase/crash?id=2",
+                                    success:function (data) {
+                                        alert("success");
+                                    },
+                                    error:function () {
+                                        alert("error");
+                                    }
                                 });
-                            });
+                            }
+                            function myfun1() {
+                                $.ajax({
+                                    type:"get",
+                                    url:"/database/hbase/crash?id=1",
+                                    success:function (data) {
+                                        alert("success");
+                                    },
+                                    error:function () {
+                                        alert("error");
+                                    }
+                                });
+                            }
+                            function myRun() {
 
-                            //表单取值
-                            layui.$('#LAY-component-form-getval').on('click', function(){
-                                var data = form.val('example');
-                                alert(JSON.stringify(data));
-                            });
+                                $('#table_refresh').load("/database/hbase/run");
 
+                            }
+                        </script>
+                    <!--script>
+                        $(function(){
+                            var $btn=$(".btn");
+                            $btn.on
+                            (
+                                "click",function() {
+                                    $.ajax({
+                                            url: "/database/hbase/run",
+                                            success: function () {
+                                            }
 
-                        });
-                    </script>
+                                        })
+                                }
+                            )
+                        })
+                    </script-->
+
 
 
 
