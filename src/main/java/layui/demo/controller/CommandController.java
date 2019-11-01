@@ -54,7 +54,7 @@ public class CommandController
             return e.getMessage();
         }
     }
-    @RequestMapping("/test")
+    //@RequestMapping("/test")
     //@ResponseBody
     public String pwd(Model model,@RequestParam(value = "name",required = false) String name)
     {

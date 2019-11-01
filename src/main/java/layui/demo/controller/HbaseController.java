@@ -77,12 +77,13 @@ public class HbaseController
             return e.getMessage();
         }*/
 
-      for(int i = 0;i<1000000;i++)
+      for(int i = 0;i<10;i++)
       {
           model.addAttribute("pwdresult",i+"\n");
           logger.info(i+"");
 
       }
+      //::table_refresh
         return "hbase::table_refresh";
     }
 }
