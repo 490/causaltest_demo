@@ -3,6 +3,7 @@ package layui.demo.controller;
 import com.alibaba.fastjson.JSON;
 import jdk.nashorn.internal.objects.NativeJSON;
 import layui.demo.dao.LogUtil;
+import layui.demo.model.Result;
 import layui.demo.model.TomcatLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,7 +24,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @EnableScheduling   //定时任务支持
@@ -67,8 +72,29 @@ public class WebSocketController {
      * @return
      * @throws Exception
      */
+    private JedisPool pool  = new JedisPool("redis://192.168.7.125:6379/10");
+
+    public long scard(String key)
+    {
+        //Scard 命令返回集合中元素的数量
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.scard(key);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return 0;
+    }
+
+
     @Scheduled(initialDelay = 5000,fixedRate = 1000)
     public String serverTime() throws Exception {
+
 
 
         String path = "/home/zl/Documents/test/access_log.2019-11-01.log";
