@@ -1,6 +1,7 @@
 package layui.demo.controller;
 
 import layui.demo.dao.ConfigFile;
+import layui.demo.service.ResultService;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteWatchdog;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.ByteArrayOutputStream;
 
@@ -22,7 +24,6 @@ public class CassandraController {
     @Autowired
     ConfigFile configFile;
     private static final Logger logger = LoggerFactory.getLogger(CommandController.class);
-
 
     @RequestMapping(value="/database/cassandra")
     public String cassandra(@RequestParam(value = "website",required = false) String website,
@@ -36,19 +37,26 @@ public class CassandraController {
         if(website!=null && count != null && consistency !=null)
         {
             configFile.setConfig(website,count,consistency,"Cassandra",wcl,rcl);
-            String result = "Website=["+website+"], Test times=["+count+"], Consistency=["+consistency+"]";
+            String result = "Website=["+website+"], Test times=["+count+"], Consistency=["+consistency+"]"
+                    + "Read Consistency Level=["+rcl+"], Write Consistency Level=["+wcl+"]"+", keyspace=["
+                    +keyspace+"]";
             logger.info(result);
             model.addAttribute("result",result);
         }
         return "cassandra";
     }
 
-
+    @RequestMapping("/database/cassandra/crash")
+    public String del(@RequestParam(name="id") String id)
+    {
+        logger.info(id);
+        return "cassandra";
+    }
     @RequestMapping(value="/database/cassandra/run")
     public String run(Model model)
     {
         try {
-            String command = "pwd ";
+            String command = "ping xuserver002";
             //接收正常结果流
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             //接收异常结果流
@@ -67,7 +75,7 @@ public class CassandraController {
             String error = errorStream.toString("utf-8");
             model.addAttribute("pwdresult",out+error);
             logger.info(out);
-            return "cassandra";
+            return "cassandra::table_refresh";
         } catch (Exception e) {
             e.printStackTrace();
             return e.getMessage();

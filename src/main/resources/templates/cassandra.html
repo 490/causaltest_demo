@@ -12,9 +12,9 @@
     <!--主体区域-->
     <div class="layui-body">
         <div class="layui-container">
-            <div class="layui-row layui-col-space5">
-                <div class="layui-col-lg7">
-                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 5px;">
+            <div class="layui-row ">
+                <div class="layui-col-xs9">
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
                         <legend>Cassandra</legend>
                     </fieldset>
                     <form class="form-horizontal" role="form" action="/database/cassandra" method="get">
@@ -103,7 +103,8 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <!--button type="submit" class="btn btn-success btn-lg btn-block" >Run</button-->
-                                <button  type="button" onclick="myRun()" class="btn  btn-success btn-lg btn-block">Run</button>
+                                <button  type="button" onclick="myRun()" class="btn  btn-success btn-lg btn-block"
+                                         ng-disabled="data.connected" ng-click="connect()">Run</button>
                             </div>
                         </div>
 
@@ -111,16 +112,21 @@
                             <button type="button" ng-click="disconnect()" ng-disabled="!data.connected" class="btn  btn-danger">Stop</button>
                             <button id="btn1" type="button" onclick="myfun1()" class="btn btn-default">Kill Coordinator</button>
                             <button id="btn2" type="button" onclick="myfun2()" class="btn btn-default">Kill Data</button>
+
                             <button id="btn3" type="button" onclick="myfun3()" class="btn btn-default">Kill Coordinator and Recover</button>
                             <button id="btn4" type="button" onclick="myfun4()" class="btn btn-default">Kill Data and Recover</button>
+
+                            <button id="btn5" type="button" onclick="myfun5()" class="btn btn-default">echarts</button>
+
                         </div>
                     </form>
                 </div>
 
 
-                <div class="layui-col-lg5">
-                    <div  id="echarts"  style="width: 450px;height:400px;"></div>
-                </div>
+
+
+
+
 
             </div>
 
@@ -133,17 +139,36 @@
 
                         <div ng-show="data.connected"  >
                             <div style="height:300px;overflow-x:scroll; position: relative;weight:1000px" data-offset="10">
-                                {{data.message}}
+                                <!--{{data.message}}-->
+                              <!--  databasename=Cassandra<br>
+                                [httpGet2] ?type=init<br>
+                                [httpGet2] ?type=createtable&tableName=k123.twitterusertable&fields=id,text,tweetid,text,liketweet,text,retweet,text,commenttweet,text,time,text&pk=id<br>
+                                [httpGet2] ?type=insert&tableName=twitterusertable&keyrow=id&key=8051907424829403614&col=liketweet&val=3157159729198910408&time=2019/11/22-19:11:35:605<br>
+                                [httpGet2] ?type=read&key=8051907424829403614&pk=liketweet&tableName=twitterusertable<br>
+                                [result]=[3157159729198910408]<br>
+                                [httpGet2] ?type=delete&key=8051907424829403614&col=liketweet&keyrow=id&tableName=twitterusertable<br>
+                                ============================================================================1<br>
+                                [httpGet2] ?type=insert&tableName=twitterusertable&keyrow=id&key=8051907424829403614&col=liketweet&val=3157159729198910408&time=2019/11/22-19:11:35:605<br>
+                                [httpGet2] ?type=read&key=8051907424829403614&pk=liketweet&tableName=twitterusertable<br>
+                                [result]=[3157159729198910408]<br>
+                                [httpGet2] ?type=delete&key=8051907424829403614&col=liketweet&keyrow=id&tableName=twitterusertable<br>
+                                ============================================================================2<br>
+                                [httpGet2] ?type=insert&tableName=twitterusertable&keyrow=id&key=8051907424829403614&col=liketweet&val=3157159729198910408&time=2019/11/22-19:11:35:605<br>
+                                [httpGet2] ?type=read&key=8051907424829403614&pk=liketweet&tableName=twitterusertable<br>
+                                [result]=[3157159729198910408]<br>
+                                [httpGet2] ?type=delete&key=8051907424829403614&col=liketweet&keyrow=id&tableName=twitterusertable<br>
+                                ============================================================================3<br>
+                                    -->
+
                             </div>
                         </div>
 
                         <ul class="nav nav-list"><li class="divider"></li></ul>
+                        <div  id="echarts"  style="width: 900px;height:500px;"></div>
 
-                        <div id="table_refresh" style="height:400px;overflow:auto; position: relative;weight:1200px" th:fragment="table_refresh">
-                            <!---span th:text="${showresult}" ></span-->
-                        </div>
                     </div>
                 </div>
+
             </div>
 
 
@@ -153,7 +178,10 @@
     <!--底部-->
     <div th:replace="fragments/footer :: footer"></div>
 </div>
-<script type="text/javascript">
+
+
+
+<script type="text/javascript" th:inline="none">
 
     function myfun4() {
         $.ajax({
@@ -203,12 +231,103 @@
             }
         });
     }
-    function myRun() {
+    /*function myRun() {
 
         $('#table_refresh').load("/database/cassandra/run");
 
-    }
+    }*/
 
+    function myfun5() {
+
+        $.ajax({
+            type:"get",
+            url:"/echarts",
+            dataType:"json",
+            success: function (data) {
+                var echartsData =[['time'],['exception'],['violation']];
+
+                for (var i = 0; i < data.length; i++) {
+                    echartsData[0].push(data[i].tm);
+                    echartsData[1].push(data[i].excp);
+                    echartsData[2].push(data[i].vio);
+                }
+
+                var myChart = echarts.init(document.getElementById('echarts'));
+                myChart.clear();
+                var option = {
+
+                    legend: {},
+                    tooltip: {
+                        trigger: 'axis',
+                        showContent: false
+                    },
+                    dataset: {
+                        source: echartsData
+                    },
+                    xAxis: {
+                        type: 'category',
+                        name: 'Time'
+                    },
+                    yAxis: {
+                        gridIndex: 0,
+                        name: 'Number',
+                    },
+                    grid: {top: '55%'},
+                    series: [
+                        {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+                        {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+                        {
+                            type: 'pie',
+                            id: 'pie',
+                            radius: '30%',
+                            center: ['50%', '25%'],
+                            label: {
+                                formatter: '{b}: {@2012} ({d}%)'
+                            },
+                            encode: {
+                                itemName: 'time',
+                                value: '2012',
+                                tooltip: '2012'
+                            }
+                        }
+                    ]
+                };
+
+                myChart.on('updateAxisPointer', function (event) {
+                    var xAxisInfo = event.axesInfo[0];
+                    if (xAxisInfo) {
+                        var dimension = xAxisInfo.value + 1;
+                        myChart.setOption({
+                            series: {
+                                id: 'pie',
+                                label: {
+                                    formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+                                },
+                                encode: {
+                                    value: dimension,
+                                    tooltip: dimension
+                                }
+                            }
+                        });
+                    }
+                });
+
+                myChart.setOption(option);
+
+            }
+            ,
+            error:function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("错误");
+                // 状态码
+                console.log(XMLHttpRequest.status);
+                // 状态
+                console.log(XMLHttpRequest.readyState);
+                // 错误信息
+                console.log(textStatus);
+
+            }
+        });
+    }
 
 
 
@@ -230,7 +349,7 @@
             stompClient.connect({}, function(frame) {
                 // 订阅后端主动推消息到前端的topic
                 stompClient.subscribe('/topicTest/servertime', function(r) {
-                    $scope.data.message =  '当前服务器时间：' + r.body;
+                    $scope.data.message =  r.body;
                     $scope.data.connected = true;
                     $scope.$apply();
                 });
@@ -249,80 +368,11 @@
 
 
 
-    var myChart = echarts.init(document.getElementById('echarts'));
 
-    function randomData() {
-        now = new Date(+now + oneDay);
-        value = value + Math.random() * 21 - 10;
-        return {
-            name: now.toString(),
-            value: [
-                [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'),
-                Math.round(value)
-            ]
-        }
-    }
 
-    var data = [];
-    var now = +new Date(1997, 9, 3);
-    var oneDay = 24 * 3600 * 1000;
-    var value = Math.random() * 1000;
-    for (var i = 0; i < 1000; i++) {
-        data.push(randomData());
-    }
 
-    option = {
 
-        tooltip: {
-            trigger: 'axis',
-            formatter: function (params) {
-                params = params[0];
-                var date = new Date(params.name);
-                return date.getHours() + ':' + (date.getMinutes()) + ':' + date.getSeconds() + ':' + date.getMilliseconds()
-                    + ' : '+params.value[1];
-            },
-            axisPointer: {
-                animation: false
-            }
-        },
-        xAxis: {
-            name: 'Time',
-            type: 'time',
-            splitLine: {
-                show: false
-            }
-        },
-        yAxis: {
-            name: 'Count',
-            type: 'value',
-            boundaryGap: [0, '100%'],
-            splitLine: {
-                show: false
-            }
-        },
-        series: [{
-            name: '模拟数据',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data: data
-        }]
-    };
 
-    setInterval(function () {
-
-        for (var i = 0; i < 5; i++) {
-            data.shift();
-            data.push(randomData());
-        }
-        myChart.setOption(option)
-
-        myChart.setOption({
-            series: [{
-                data: data
-            }]
-        });
-    }, 1000);
 
 </script>
 </body>

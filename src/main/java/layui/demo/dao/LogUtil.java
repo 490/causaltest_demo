@@ -5,10 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Repository;
 
 import javax.websocket.Session;
 import java.io.BufferedReader;
 import java.io.IOException;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -27,7 +29,6 @@ public class LogUtil extends Thread
     private int lineCount = 0;
     private Process process;
 
-    private InputStream inputStream;
     public LogUtil(InputStream in)
     {
         this.reader = new BufferedReader(new InputStreamReader(in));

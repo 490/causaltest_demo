@@ -22,7 +22,7 @@ public class CommandController
 {
     private static final Logger logger = LoggerFactory.getLogger(CommandController.class);
     //String path = "/data/zhaole/causaltest/causalwebserver/src/main/resources/conf.properties";
-    String path="/home/zl/Documents/test/conf.properties";
+    String path="/data/zhaole/causaltest/causalwebserver/src/main/resources/conf.properties";
     @RequestMapping("/pwd")
     //@ResponseBody
     public String pwd(Model model)

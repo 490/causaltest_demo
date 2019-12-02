@@ -3,34 +3,25 @@ package layui.demo.model;
 public class Result
 {
 
+    String _num;
+    String _time;
 
 
-    public int getViolationnum() {
-        return violationnum;
+
+
+    public String get_num() {
+        return _num;
     }
 
-    public void setViolationnum(int violationnum) {
-        this.violationnum = violationnum;
+    public void set_num(String _num) {
+        this._num = _num;
     }
 
-    public int getExceptionnum() {
-        return exceptionnum;
+    public String get_time() {
+        return _time;
     }
 
-    public void setExceptionnum(int exceptionnum) {
-        this.exceptionnum = exceptionnum;
+    public void set_time(String _time) {
+        this._time = _time;
     }
-
-    public Long getResulttime() {
-        return resulttime;
-    }
-
-    public void setResulttime(Long resulttime) {
-        this.resulttime = resulttime;
-    }
-
-    int violationnum;
-    int exceptionnum;
-    Long resulttime;
-
 }

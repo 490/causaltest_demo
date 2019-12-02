@@ -72,7 +72,7 @@ public class WebSocketController {
      * @return
      * @throws Exception
      */
-    private JedisPool pool  = new JedisPool("redis://192.168.7.125:6379/10");
+   /* private JedisPool pool  = new JedisPool("redis://192.168.7.125:6379/10");
 
     public long scard(String key)
     {
@@ -89,7 +89,7 @@ public class WebSocketController {
             }
         }
         return 0;
-    }
+    }*/
 
 
     @Scheduled(initialDelay = 5000,fixedRate = 1000)
@@ -97,7 +97,7 @@ public class WebSocketController {
 
 
 
-        String path = "/home/zl/Documents/test/access_log.2019-11-01.log";
+        String path = "/data/zhaole/causaltest/result.txt";
 
         process = Runtime.getRuntime().exec("tail -f " + path);
         inputStream = process.getInputStream();

@@ -23,8 +23,7 @@ public class HbaseController
     @Autowired
     ConfigFile configFile;
     private static final Logger logger = LoggerFactory.getLogger(CommandController.class);
-    //String path = "/data/zhaole/causaltest/causalwebserver/src/main/resources/conf.properties";
-    String path="/home/zl/Documents/test/conf.properties";
+    String path = "/data/zhaole/causaltest/causalwebserver/src/main/resources/conf.properties";
     @RequestMapping(value="/database/hbase")
     public String hbase(@RequestParam(value = "website",required = false) String website,
                         @RequestParam(value = "count",required = false) String count,
@@ -37,6 +36,33 @@ public class HbaseController
             String result = "Website=["+website+"], Test times=["+count+"], Consistency=["+consistency+"]";
             logger.info(result);
             model.addAttribute("result",result);
+
+            try {
+                String command = "/data/zhaole/causaltest/bin/redeploy.sh ";
+                //接收正常结果流
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                //接收异常结果流
+                ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
+                CommandLine commandline = CommandLine.parse(command);
+                DefaultExecutor exec = new DefaultExecutor();
+                exec.setExitValues(null);
+                //设置一分钟超时
+                ExecuteWatchdog watchdog = new ExecuteWatchdog(60*1000);
+                exec.setWatchdog(watchdog);
+                PumpStreamHandler streamHandler = new PumpStreamHandler(outputStream,errorStream);
+                exec.setStreamHandler(streamHandler);
+                exec.execute(commandline);
+                //不同操作系统注意编码，否则结果乱码
+                String out = outputStream.toString("utf-8");
+                String error = errorStream.toString("utf-8");
+                model.addAttribute("pwdresult",out+error);
+                logger.info(out);
+                return "hbase";
+            } catch (Exception e) {
+                e.printStackTrace();
+                return e.getMessage();
+            }
+
         }
 
         return "hbase";
@@ -50,9 +76,9 @@ public class HbaseController
     @RequestMapping(value="/database/hbase/run")
     public String run(Model model)
     {
-        //./data/zhaole/causaltest/bin/runtest.sh
-      /*  try {
-            String command = "ping 192.168.3.129 ";
+        logger.info("hbase run");
+        try {
+            String command = "/data/zhaole/causaltest/bin/runtest.sh ";
             //接收正常结果流
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             //接收异常结果流
@@ -71,19 +97,19 @@ public class HbaseController
             String error = errorStream.toString("utf-8");
             model.addAttribute("pwdresult",out+error);
             logger.info(out);
-            return "hbase";
+            return "hbase::table_refresh";
         } catch (Exception e) {
             e.printStackTrace();
             return e.getMessage();
-        }*/
-
+        }
+/*
       for(int i = 0;i<10;i++)
       {
           model.addAttribute("pwdresult",i+"\n");
           logger.info(i+"");
 
-      }
+      }*/
       //::table_refresh
-        return "hbase::table_refresh";
+       // return "hbase::table_refresh";
     }
 }

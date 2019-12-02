@@ -10,7 +10,7 @@ import java.io.*;
 @Component
 public class ConfigFile
 {
-    String path="/home/zl/Documents/test/conf.properties";
+    String path="/data/zhaole/causaltest/causalwebserver/src/main/resources/conf.properties";
     private static final Logger logger = LoggerFactory.getLogger(ConfigFile.class);
 
     //cassandra
