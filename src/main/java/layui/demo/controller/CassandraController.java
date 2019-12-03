@@ -25,8 +25,10 @@ import java.io.InputStream;
 public class CassandraController {
     @Autowired
     ConfigFile configFile;
-    private static final Logger logger = LoggerFactory.getLogger(CommandController.class);
-
+    private static final Logger logger = LoggerFactory.getLogger(CassandraController.class);
+    private Process process;
+    private InputStream inputStream;
+    private ProcessBuilder processBuilder = new ProcessBuilder();
     @RequestMapping(value="/database/cassandra")
     public String cassandra(@RequestParam(value = "website",required = false) String website,
                             @RequestParam(value = "count",required = false) String count,
@@ -44,6 +46,8 @@ public class CassandraController {
                     +keyspace+"]";
             logger.info(result);
             model.addAttribute("result",result);
+            configFile.redeploy();
+
         }
         return "cassandra";
     }
@@ -54,9 +58,7 @@ public class CassandraController {
         logger.info(id);
         return "cassandra";
     }
-    private Process process;
-    private InputStream inputStream;
-    private ProcessBuilder processBuilder = new ProcessBuilder();
+
     @RequestMapping(value="/database/cassandra/run")
     public String run(Model model)
     {

@@ -76,77 +76,43 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <!--button type="submit" class="btn btn-success btn-lg btn-block" >Run</button-->
-                                <button  type="button" onclick="myRun()" class="btn  btn-success btn-lg btn-block"
-                                         ng-disabled="data.connected" ng-click="connect()">Run</button>
+                                <button  type="button" onclick="myRun()" class="btn  btn-success btn-lg btn-block">Run</button>
                             </div>
                         </div>
 
 
 
                         <div class="btn-group">
-                            <button type="button" ng-click="disconnect()" ng-disabled="!data.connected" class="btn  btn-danger">Stop</button>
+                            <button type="button"  class="btn  btn-danger">Stop</button>
                             <button id="btn1" type="button" onclick="myfun1()" class="btn btn-default">Kill Master</button>
                             <button id="btn2" type="button" onclick="myfun2()" class="btn btn-default">Kill Slave</button>
                             <button id="btn3" type="button" onclick="myfun3()" class="btn btn-default">Kill Master and Recover</button>
                             <button id="btn4" type="button" onclick="myfun4()" class="btn btn-default">Kill Slave and Recover</button>
                         </div>
 
-
-
                     </form>
-
-                    <!--script>
-                        $(function(){
-                            var $btn=$(".btn");
-                            $btn.on
-                            (
-                                "click",function() {
-                                    $.ajax({
-                                            url: "/database/hbase/run",
-                                            success: function () {
-                                            }
-
-                                        })
-                                }
-                            )
-                        })
-                    </script-->
-
-
-
-
-
                 </div>
-
-
-                <div class="layui-col-lg5">
-                    <div  id="echarts"  style="width: 450px;height:400px;"></div>
-                </div>
-
-
             </div>
 
-            <div class="layui-row">
 
+            <div class="layui-row>">
                 <div class="layui-col-lg11" >
 
                     <div class="panel panel-default" style="margin-top: 5px;">
                         <div class="panel-heading">Log</div>
+                        <div id="log-container" style="height:400px;overflow-y:scroll; position: relative;weight:1000px" data-offset="10">
+                            <div>
 
-                        <div ng-show="data.connected"  >
-                            <div style="height:300px;overflow-x:scroll; position: relative;weight:1000px" data-offset="10">
-                                {{data.message}}
                             </div>
                         </div>
-
-                        <ul class="nav nav-list"><li class="divider"></li></ul>
-
-                        <div id="table_refresh" style="height:400px;overflow:auto; position: relative;weight:1200px" th:fragment="table_refresh">
-                            <!---span th:text="${showresult}" ></span-->
-                        </div>
                     </div>
+                    <ul class="nav nav-list"><li class="divider"></li></ul>
+                    <div  id="echarts"  style="width: 900px;height:500px;"></div>
                 </div>
             </div>
+
+
+
 
         </div>
     </div>
@@ -208,136 +174,115 @@
     }
     function myRun() {
 
-        $("#table_refresh").load("/database/hbase/run");
-
-    }
-
-
-
-    var stompClient = null;
-
-    var app = angular.module('app', []);
-    app.controller('MainController', function($rootScope, $scope, $http) {
-
-        $scope.data = {
-            connected : false,
-            sendMessage : '',
-            receivMessages : []
-        };
-
-        //连接
-        $scope.connect = function() {
-            var socket = new SockJS('/websocket-simple');
-            stompClient = Stomp.over(socket);
-            stompClient.connect({}, function(frame) {
-                // 订阅后端主动推消息到前端的topic
-                stompClient.subscribe('/topicTest/servertime', function(r) {
-                    $scope.data.message =  JSON.parse(r.body);
-                    $scope.data.connected = true;
-                    $scope.$apply();
-                });
-                $scope.data.connected = true;
-                $scope.$apply();
-            });
-        };
-
-        $scope.disconnect = function() {
-            if (stompClient != null) {
-                stompClient.disconnect();
-            }
-            $scope.data.connected = false;
-        }
-    });
-
-
-
-    $(function(){
-        setFsChartBar();
-    });
-    function setFsChartBar(url){
-        var myChart = echarts.init(document.getElementById('echarts'));
-        //用户等待
-        myChart.showLoading({text: 'Loding...'  });
-        //自定义变量
-        var times=[];
-        var violaiton = [];
-        var exception = [];
-        getData(myChart); //先执行一次，以防等十秒后才出现图表
-        setInterval(function(){//定时器
-            getData(myChart);
-        },1000);//每隔10秒刷新一次
-    }
-    //获取数据的方法
-    function getData(myChart)
-    {
-        //发送Ajax请求
         $.ajax({
-            url : "/resultshow",
+            type:"get",
+            url:"/database/hbase/run",
+            success:function(data){
+                console.log("cassandra run script success")
+            },error:function(e){
+                console.log(e+",,cassandra run script error")
+            }
+        })
+        var websocket = new WebSocket('ws://39.104.154.79:8082/log');
+        websocket.onmessage = function(event) {
+            // 接收服务端的实时日志并添加到HTML页面中
+            $("#log-container div").append(event.data);
+            // 滚动条滚动到最低部
+            $("#log-container").scrollTop($("#log-container div").height() - $("#log-container").height());
+        };
+    }
+    
+    function myfun5() {
+
+        $.ajax({
+            type:"get",
+            url:"/echarts",
             dataType:"json",
-            type:'post',
-            success:function(json){//
-                console.log("获取图表数据");
-                console.log(json);
-                times = json.resulttime;  //拿到后台的数据
-                violation = json.violationnum;   //拿到后台的数据
-                exception = json.exceptionnum;
+            success: function (data) {
+                var echartsData =[['time'],['exception'],['violation']];
+
+                for (var i = 0; i < data.length; i++) {
+                    echartsData[0].push(data[i].tm);
+                    echartsData[1].push(data[i].excp);
+                    echartsData[2].push(data[i].vio);
+                }
+
+                var myChart = echarts.init(document.getElementById('echarts'));
+                myChart.clear();
                 var option = {
-                    title: {
-                        text: 'Statistics'
-                    },
 
+                    legend: {},
                     tooltip: {
-                        trigger: 'axis'
+                        trigger: 'axis',
+                        showContent: false
                     },
-
-                    legend: {
-                        data:['violation','exception']
+                    dataset: {
+                        source: echartsData
                     },
-
-                    grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
-                        containLabel: true
-                    },
-                    toolbox: {
-                        feature: {
-                            saveAsImage: {}
-                        }
-                    },
-
                     xAxis: {
                         type: 'category',
-                        boundaryGap: false,
-                        data:times
+                        name: 'Time'
                     },
-
                     yAxis: {
-                        type: 'value'
-
+                        gridIndex: 0,
+                        name: 'Number',
                     },
-                    series :[
+                    grid: {top: '55%'},
+                    series: [
+                        {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+                        {type: 'line', smooth: true, seriesLayoutBy: 'row'},
                         {
-                            name:'violation',
-                            type:'line',
-                            data: violation
-                        }  ,
-                        {
-                            name:'exception',
-                            type:'line',
-                            data: exception
+                            type: 'pie',
+                            id: 'pie',
+                            radius: '30%',
+                            center: ['50%', '25%'],
+                            label: {
+                                formatter: '{b}: {@2012} ({d}%)'
+                            },
+                            encode: {
+                                itemName: 'time',
+                                value: '2012',
+                                tooltip: '2012'
+                            }
                         }
                     ]
                 };
-                //结束
-                myChart.hideLoading();
-               // setTimeout(myChart.setOption(option),500)
-                //myChart.setOption(option);
+
+                myChart.on('updateAxisPointer', function (event) {
+                    var xAxisInfo = event.axesInfo[0];
+                    if (xAxisInfo) {
+                        var dimension = xAxisInfo.value + 1;
+                        myChart.setOption({
+                            series: {
+                                id: 'pie',
+                                label: {
+                                    formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+                                },
+                                encode: {
+                                    value: dimension,
+                                    tooltip: dimension
+                                }
+                            }
+                        });
+                    }
+                });
+
+                myChart.setOption(option);
+
+            }
+            ,
+            error:function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("错误");
+                // 状态码
+                console.log(XMLHttpRequest.status);
+                // 状态
+                console.log(XMLHttpRequest.readyState);
+                // 错误信息
+                console.log(textStatus);
+
             }
         });
     }
-
-
 
 
 </script>

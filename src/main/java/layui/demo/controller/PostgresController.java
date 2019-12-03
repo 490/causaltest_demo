@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
 
 @Controller
 public class PostgresController
@@ -21,9 +23,11 @@ public class PostgresController
 {
     @Autowired
     ConfigFile configFile;
-    private static final Logger logger = LoggerFactory.getLogger(CommandController.class);
+    private static final Logger logger = LoggerFactory.getLogger(PostgresController.class);
 
-
+    private Process process;
+    private InputStream inputStream;
+    private ProcessBuilder processBuilder = new ProcessBuilder();
     @RequestMapping(value="/database/postgres")
     public String cassandra(@RequestParam(value = "website",required = false) String website,
                             @RequestParam(value = "count",required = false) String count,
@@ -36,6 +40,8 @@ public class PostgresController
             String result = "Website=["+website+"], Test times=["+count+"], Consistency=["+consistency+"]";
             logger.info(result);
             model.addAttribute("result",result);
+            configFile.redeploy();
+
         }
         return "postgres";
     }
@@ -43,25 +49,11 @@ public class PostgresController
     public String run(Model model)
     {
         try {
-            String command = "pwd ";
-            //接收正常结果流
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            //接收异常结果流
-            ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
-            CommandLine commandline = CommandLine.parse(command);
-            DefaultExecutor exec = new DefaultExecutor();
-            exec.setExitValues(null);
-            //设置一分钟超时
-            ExecuteWatchdog watchdog = new ExecuteWatchdog(60*1000);
-            exec.setWatchdog(watchdog);
-            PumpStreamHandler streamHandler = new PumpStreamHandler(outputStream,errorStream);
-            exec.setStreamHandler(streamHandler);
-            exec.execute(commandline);
-            //不同操作系统注意编码，否则结果乱码
-            String out = outputStream.toString("utf-8");
-            String error = errorStream.toString("utf-8");
-            model.addAttribute("pwdresult",out+error);
-            logger.info(out);
+            String [] cmd={"/bin/sh","-c","/data/zhaole/causaltest/bin/runtest.sh > /data/zhaole/causaltest/runtimelog.txt 2>&1"};
+            processBuilder.command(cmd);
+            processBuilder.directory(new File("/data/zhaole/causaltest"));
+            process = processBuilder.start();
+
             return "postgres";
         } catch (Exception e) {
             e.printStackTrace();

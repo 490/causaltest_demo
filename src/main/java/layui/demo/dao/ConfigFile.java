@@ -1,6 +1,5 @@
 package layui.demo.dao;
 
-import layui.demo.controller.CommandController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -383,5 +382,20 @@ public class ConfigFile
         }
 
 
+    }
+
+    private Process process;
+    private InputStream inputStream;
+    private ProcessBuilder processBuilder = new ProcessBuilder();
+    public void redeploy()
+    {
+        try {
+            String [] cmd={"/bin/sh","-c","/data/zhaole/causaltest/bin/redeploy.sh"};
+            processBuilder.command(cmd);
+            processBuilder.directory(new File("/data/zhaole/causaltest"));
+            process = processBuilder.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

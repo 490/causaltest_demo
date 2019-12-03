@@ -50,14 +50,3 @@ public class DatabaseController
         return "redis";
     }
 }
-/*
-*
-$.ajax({
-                                    url: '/database/habse/cmd',
-                                    async:false,
-
-                                    success: function(data){
-                                        console.log(data);
-                                    }
-                                });
-* */
