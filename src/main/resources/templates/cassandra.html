@@ -139,7 +139,7 @@
 
                         <div ng-show="data.connected"  >
 
-                            <div id="log-container" style="height:600px;overflow-y:scroll; position: relative;weight:1000px" data-offset="10">
+                            <div id="log-container" style="height:400px;overflow-y:scroll; position: relative;weight:1000px" data-offset="10">
                                 <div>
 
                                 </div>
@@ -244,8 +244,16 @@
     }
     function myRun() {
 
-        $('#table_refresh').load("/database/cassandra/run");
-        var websocket = new WebSocket('ws://39.104.154.79:8082/log');
+        $.ajax({
+            type:"get",
+            url:"/database/cassandra/run",
+            success:function(data){
+                console.log("cassandra run script success")
+            },error:function(e){
+                console.log(e+",,cassandra run script error")
+            }
+        })
+        var websocket = new WebSocket('ws://192.168.3.154:8082/log');
                 websocket.onmessage = function(event) {
                     // 接收服务端的实时日志并添加到HTML页面中
                     $("#log-container div").append(event.data);

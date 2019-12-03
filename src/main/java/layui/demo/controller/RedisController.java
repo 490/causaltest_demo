@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.io.ByteArrayOutputStream;
 
 @Controller
-public class Redis {
+public class RedisController {
     @Autowired
     ConfigFile configFile;
     private static final Logger logger = LoggerFactory.getLogger(CommandController.class);
@@ -37,7 +37,7 @@ public class Redis {
             logger.info(result);
             model.addAttribute("result",result);
         }
-        return "redis";
+        return "redisController";
     }
 
 
@@ -64,7 +64,7 @@ public class Redis {
             String error = errorStream.toString("utf-8");
             model.addAttribute("pwdresult",out+error);
             logger.info(out);
-            return "redis";
+            return "redisController";
         } catch (Exception e) {
             e.printStackTrace();
             return e.getMessage();

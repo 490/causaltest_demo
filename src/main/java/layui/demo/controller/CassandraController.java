@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 @Controller
 
@@ -52,29 +53,19 @@ public class CassandraController {
         logger.info(id);
         return "cassandra";
     }
+    private Process process;
+    private InputStream inputStream;
+
     @RequestMapping(value="/database/cassandra/run")
     public String run(Model model)
     {
         try {
-            String command = "/data/zhaole/causaltest/bin/runtest.sh";
-            //接收正常结果流
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            //接收异常结果流
-            ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
-            CommandLine commandline = CommandLine.parse(command);
-            DefaultExecutor exec = new DefaultExecutor();
-            exec.setExitValues(null);
-            //设置一分钟超时
-            ExecuteWatchdog watchdog = new ExecuteWatchdog(60*1000);
-            exec.setWatchdog(watchdog);
-            PumpStreamHandler streamHandler = new PumpStreamHandler(outputStream,errorStream);
-            exec.setStreamHandler(streamHandler);
-            exec.execute(commandline);
-            //不同操作系统注意编码，否则结果乱码
-            String out = outputStream.toString("utf-8");
-            String error = errorStream.toString("utf-8");
-            model.addAttribute("pwdresult",out+error);
-            logger.info(out);
+           // String command = "/data/zhaole/causaltest/bin/runtest.sh";
+           // String [] cmd={"/bin/sh","-c","ping 192.168.3.129 > /home/zl/Documents/test/pingcmd.txt"};
+            String [] cmd={"/bin/sh","-c","/data/zhaole/causaltest/bin/runtest.sh"};
+            process = Runtime.getRuntime().exec(cmd);
+            logger.info("cassandra run....");
+
             return "cassandra";
         } catch (Exception e) {
             e.printStackTrace();
