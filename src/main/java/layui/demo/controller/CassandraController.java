@@ -56,7 +56,7 @@ public class CassandraController {
     public String run(Model model)
     {
         try {
-            String command = "ping xuserver002";
+            String command = "/data/zhaole/causaltest/bin/runtest.sh";
             //接收正常结果流
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             //接收异常结果流
@@ -75,7 +75,7 @@ public class CassandraController {
             String error = errorStream.toString("utf-8");
             model.addAttribute("pwdresult",out+error);
             logger.info(out);
-            return "cassandra::table_refresh";
+            return "cassandra";
         } catch (Exception e) {
             e.printStackTrace();
             return e.getMessage();

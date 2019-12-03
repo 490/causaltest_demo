@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--head部分-->
+<head th:include="layout :: htmlhead" th:with="title='CausalTest Management'">
+</head>
+<body class="layui-layout-body">
+<button id="btn" type="button" onclick="Hello()" class="btn btn-default">测试WebSocket</button>
+<div  id="logpanel"  style="width: 900px;height:500px;"></div>
+
+<script type="text/javascript" th:inline="none">
+
+    function Hello()
+    {
+        console.log("=========开始========");
+        var socket;
+        if(typeof(WebSocket) == "undefined") {
+            console.log("您的浏览器不支持WebSocket");
+        }else{
+            console.log("您的浏览器支持WebSocket");
+            socket = new WebSocket("ws://192.168.3.154:8082/websocket");
+            //打开事件
+            socket.onopen = function() {
+                console.log("Socket 已打开");
+                //socket.send("这是来自客户端的消息" + location.href + new Date());
+            };
+            //获得消息事件
+            socket.onmessage = function(msg) {
+                var logger = document.getElementById('logpanel');
+                logger.innerHTML += msg.data + '<br />';
+                console.log(msg.data);
+                //发现消息进入 调后台获取
+            };
+            //关闭事件
+            socket.onclose = function() {
+                console.log("Socket已关闭");
+            };
+            //发生了错误事件
+            socket.onerror = function() {
+                alert("Socket发生了错误");
+            }
+        }
+    }
+
+</script>
+</body>
+</html>

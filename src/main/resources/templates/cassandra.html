@@ -138,7 +138,12 @@
                         <div class="panel-heading">Log</div>
 
                         <div ng-show="data.connected"  >
-                            <div style="height:300px;overflow-x:scroll; position: relative;weight:1000px" data-offset="10">
+
+                            <div id="log-container" style="height:600px;overflow-y:scroll; position: relative;weight:1000px" data-offset="10">
+                                <div>
+
+                                </div>
+                            </div>
                                 <!--{{data.message}}-->
                               <!--  databasename=Cassandra<br>
                                 [httpGet2] ?type=init<br>
@@ -160,7 +165,7 @@
                                 ============================================================================3<br>
                                     -->
 
-                            </div>
+                        </div>
                         </div>
 
                         <ul class="nav nav-list"><li class="divider"></li></ul>
@@ -182,6 +187,12 @@
 
 
 <script type="text/javascript" th:inline="none">
+
+  /*  $(document).ready(function() {
+        // 指定websocket路径
+
+    });*/
+
 
     function myfun4() {
         $.ajax({
@@ -231,12 +242,49 @@
             }
         });
     }
-    /*function myRun() {
+    function myRun() {
 
         $('#table_refresh').load("/database/cassandra/run");
+        var websocket = new WebSocket('ws://39.104.154.79:8082/log');
+                websocket.onmessage = function(event) {
+                    // 接收服务端的实时日志并添加到HTML页面中
+                    $("#log-container div").append(event.data);
+                    // 滚动条滚动到最低部
+                    $("#log-container").scrollTop($("#log-container div").height() - $("#log-container").height());
+                };
+    }
 
-    }*/
-
+    function Hello()
+    {
+        console.log("=========开始========");
+        var socket;
+        if(typeof(WebSocket) == "undefined") {
+            console.log("您的浏览器不支持WebSocket");
+        }else{
+            console.log("您的浏览器支持WebSocket");
+            socket = new WebSocket("ws://192.168.3.154:8082/log");
+            //打开事件
+            socket.onopen = function() {
+                console.log("Socket 已打开");
+                //socket.send("这是来自客户端的消息" + location.href + new Date());
+            };
+            //获得消息事件
+            socket.onmessage = function(msg) {
+                var logger = document.getElementById('logpanel');
+                logger.innerHTML += msg.data + '<br />';
+                console.log(msg.data);
+                //发现消息进入 调后台获取
+            };
+            //关闭事件
+            socket.onclose = function() {
+                console.log("Socket已关闭");
+            };
+            //发生了错误事件
+            socket.onerror = function() {
+                alert("Socket发生了错误");
+            }
+        }
+    }
     function myfun5() {
 
         $.ajax({
