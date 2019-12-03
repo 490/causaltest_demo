@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
 
 @Controller
@@ -55,17 +56,15 @@ public class CassandraController {
     }
     private Process process;
     private InputStream inputStream;
-
+    private ProcessBuilder processBuilder = new ProcessBuilder();
     @RequestMapping(value="/database/cassandra/run")
     public String run(Model model)
     {
         try {
-           // String command = "/data/zhaole/causaltest/bin/runtest.sh";
-           // String [] cmd={"/bin/sh","-c","ping 192.168.3.129 > /home/zl/Documents/test/pingcmd.txt"};
-            String [] cmd={"/bin/sh","-c","/data/zhaole/causaltest/bin/runtest.sh"};
-            process = Runtime.getRuntime().exec(cmd);
-            logger.info("cassandra run....");
-
+            String [] cmd={"/bin/sh","-c","/data/zhaole/causaltest/bin/runtest.sh > /data/zhaole/causaltest/runtimelog.txt 2>&1"};
+            processBuilder.command(cmd);
+            processBuilder.directory(new File("/data/zhaole/causaltest"));
+            process = processBuilder.start();
             return "cassandra";
         } catch (Exception e) {
             e.printStackTrace();

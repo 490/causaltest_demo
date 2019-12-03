@@ -103,13 +103,12 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <!--button type="submit" class="btn btn-success btn-lg btn-block" >Run</button-->
-                                <button  type="button" onclick="myRun()" class="btn  btn-success btn-lg btn-block"
-                                         ng-disabled="data.connected" ng-click="connect()">Run</button>
+                                <button  type="button" onclick="myRun()" class="btn  btn-success btn-lg btn-block">Run</button>
                             </div>
                         </div>
 
                         <div class="btn-group">
-                            <button type="button" ng-click="disconnect()" ng-disabled="!data.connected" class="btn  btn-danger">Stop</button>
+                            <button type="button" class="btn  btn-danger">Stop</button>
                             <button id="btn1" type="button" onclick="myfun1()" class="btn btn-default">Kill Coordinator</button>
                             <button id="btn2" type="button" onclick="myfun2()" class="btn btn-default">Kill Data</button>
 
@@ -136,41 +135,14 @@
 
                     <div class="panel panel-default" style="margin-top: 5px;">
                         <div class="panel-heading">Log</div>
-
-                        <div ng-show="data.connected"  >
-
                             <div id="log-container" style="height:400px;overflow-y:scroll; position: relative;weight:1000px" data-offset="10">
                                 <div>
 
                                 </div>
                             </div>
-                                <!--{{data.message}}-->
-                              <!--  databasename=Cassandra<br>
-                                [httpGet2] ?type=init<br>
-                                [httpGet2] ?type=createtable&tableName=k123.twitterusertable&fields=id,text,tweetid,text,liketweet,text,retweet,text,commenttweet,text,time,text&pk=id<br>
-                                [httpGet2] ?type=insert&tableName=twitterusertable&keyrow=id&key=8051907424829403614&col=liketweet&val=3157159729198910408&time=2019/11/22-19:11:35:605<br>
-                                [httpGet2] ?type=read&key=8051907424829403614&pk=liketweet&tableName=twitterusertable<br>
-                                [result]=[3157159729198910408]<br>
-                                [httpGet2] ?type=delete&key=8051907424829403614&col=liketweet&keyrow=id&tableName=twitterusertable<br>
-                                ============================================================================1<br>
-                                [httpGet2] ?type=insert&tableName=twitterusertable&keyrow=id&key=8051907424829403614&col=liketweet&val=3157159729198910408&time=2019/11/22-19:11:35:605<br>
-                                [httpGet2] ?type=read&key=8051907424829403614&pk=liketweet&tableName=twitterusertable<br>
-                                [result]=[3157159729198910408]<br>
-                                [httpGet2] ?type=delete&key=8051907424829403614&col=liketweet&keyrow=id&tableName=twitterusertable<br>
-                                ============================================================================2<br>
-                                [httpGet2] ?type=insert&tableName=twitterusertable&keyrow=id&key=8051907424829403614&col=liketweet&val=3157159729198910408&time=2019/11/22-19:11:35:605<br>
-                                [httpGet2] ?type=read&key=8051907424829403614&pk=liketweet&tableName=twitterusertable<br>
-                                [result]=[3157159729198910408]<br>
-                                [httpGet2] ?type=delete&key=8051907424829403614&col=liketweet&keyrow=id&tableName=twitterusertable<br>
-                                ============================================================================3<br>
-                                    -->
-
                         </div>
-                        </div>
-
                         <ul class="nav nav-list"><li class="divider"></li></ul>
                         <div  id="echarts"  style="width: 900px;height:500px;"></div>
-
                     </div>
                 </div>
 
@@ -253,7 +225,7 @@
                 console.log(e+",,cassandra run script error")
             }
         })
-        var websocket = new WebSocket('ws://192.168.3.154:8082/log');
+        var websocket = new WebSocket('ws://39.104.154.79:8082/log');
                 websocket.onmessage = function(event) {
                     // 接收服务端的实时日志并添加到HTML页面中
                     $("#log-container div").append(event.data);
@@ -384,43 +356,6 @@
             }
         });
     }
-
-
-
-    var stompClient = null;
-
-    var app = angular.module('app', []);
-    app.controller('MainController', function($rootScope, $scope, $http) {
-
-        $scope.data = {
-            connected : false,
-            sendMessage : '',
-            receivMessages : []
-        };
-
-        //连接
-        $scope.connect = function() {
-            var socket = new SockJS('/websocket-simple');
-            stompClient = Stomp.over(socket);
-            stompClient.connect({}, function(frame) {
-                // 订阅后端主动推消息到前端的topic
-                stompClient.subscribe('/topicTest/servertime', function(r) {
-                    $scope.data.message =  r.body;
-                    $scope.data.connected = true;
-                    $scope.$apply();
-                });
-                $scope.data.connected = true;
-                $scope.$apply();
-            });
-        };
-
-        $scope.disconnect = function() {
-            if (stompClient != null) {
-                stompClient.disconnect();
-            }
-            $scope.data.connected = false;
-        }
-    });
 
 
 
