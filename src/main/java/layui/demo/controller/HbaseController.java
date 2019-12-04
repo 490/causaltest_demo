@@ -52,7 +52,42 @@ public class HbaseController
     public String del(@RequestParam(name="id") String id)
     {
         logger.info(id);
-        return "hbase";
+        String[] cmd={};
+        switch (id){
+            case "1":
+            {
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/hbasemaster.sh"};
+                break;
+            }
+            case "2":
+            {
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/hbasedn.sh"};
+                break;
+            }
+            case "3":
+            {
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/hbasemaster_re.sh"};
+                break;
+            }
+            case "4":
+            {
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/hbasedn_re.sh"};
+                break;
+            }
+            default:{
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/hbasedn.sh"};
+                break;
+            }
+        }
+        try {
+            processBuilder.command(cmd);
+            processBuilder.directory(new File("/data/zhaole/causaltest"));
+            process = processBuilder.start();
+            return "hbase";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
     }
     @RequestMapping(value="/database/hbase/run")
     public String run(Model model)

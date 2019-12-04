@@ -45,6 +45,47 @@ public class MysqlController
         }
         return "mysql";
     }
+    @RequestMapping("/database/mysql/crash")
+    public String del(@RequestParam(name="id") String id)
+    {
+        logger.info(id);
+        String[] cmd={};
+        switch (id){
+            case "1":
+            {
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/cassandracoor.sh"};
+                break;
+            }
+            case "2":
+            {
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/cassandradata.sh"};
+                break;
+            }
+            case "3":
+            {
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/cassandracoor_re.sh"};
+                break;
+            }
+            case "4":
+            {
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/cassandradata_re.sh"};
+                break;
+            }
+            default:{
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/cassandradata.sh"};
+                break;
+            }
+        }
+        try {
+            processBuilder.command(cmd);
+            processBuilder.directory(new File("/data/zhaole/causaltest"));
+            process = processBuilder.start();
+            return "mysql";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+    }
     @RequestMapping(value="/database/mysql/run")
     public String run(Model model)
     {

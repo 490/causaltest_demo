@@ -45,7 +45,47 @@ public class RedisController {
         }
         return "redis";
     }
-
+    @RequestMapping("/database/redis/crash")
+    public String del(@RequestParam(name="id") String id)
+    {
+        logger.info(id);
+        String[] cmd={};
+        switch (id){
+            case "1":
+            {
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/redismaster.sh"};
+                break;
+            }
+            case "2":
+            {
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/redisslave.sh"};
+                break;
+            }
+            case "3":
+            {
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/redismaster_re.sh"};
+                break;
+            }
+            case "4":
+            {
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/redisslave_re.sh"};
+                break;
+            }
+            default:{
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/redisslave.sh"};
+                break;
+            }
+        }
+        try {
+            processBuilder.command(cmd);
+            processBuilder.directory(new File("/data/zhaole/causaltest"));
+            process = processBuilder.start();
+            return "redis";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+    }
 
     @RequestMapping(value="/database/redis/run")
     public String run(Model model)
