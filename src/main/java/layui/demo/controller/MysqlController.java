@@ -53,26 +53,17 @@ public class MysqlController
         switch (id){
             case "1":
             {
-                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/cassandracoor.sh"};
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/mysqldnb.sh"};
                 break;
             }
             case "2":
             {
-                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/cassandradata.sh"};
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/mysqldnb_re.sh"};
                 break;
             }
-            case "3":
-            {
-                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/cassandracoor_re.sh"};
-                break;
-            }
-            case "4":
-            {
-                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/cassandradata_re.sh"};
-                break;
-            }
+
             default:{
-                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/cassandradata.sh"};
+                cmd= new String[]{"/bin/sh","-c","/data/zhaole/causaltest/bin/mysqldnb_re.sh"};
                 break;
             }
         }

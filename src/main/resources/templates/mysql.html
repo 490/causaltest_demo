@@ -127,8 +127,7 @@
                         <div class="btn-group">
                             <button id="btn1" type="button" onclick="myfun1()" class="btn btn-default">Kill Data</button>
                             <button id="btn2" type="button" onclick="myfun2()" class="btn btn-default">Kill Data and Recover</button>
-                            <button id="btn3" type="button" onclick="myfun3()" class="btn btn-default">Kill Cooridinator</button>
-                            <button id="btn4" type="button" onclick="myfun4()" class="btn btn-default">Kill Coordinator and Recover</button>
+
                             <button id="btn5" type="button" onclick="myfun5()" class="btn btn-info">echarts</button>
 
                         </div>
@@ -168,30 +167,7 @@
 
 <script type="text/javascript" th:inline="none">
 
-    function myfun4() {
-        $.ajax({
-            type:"get",
-            url:"/database/postgres/crash?id=4",
-            success:function (data) {
-                alert("success");
-            },
-            error:function () {
-                alert("error");
-            }
-        });
-    }
-    function myfun3() {
-        $.ajax({
-            type:"get",
-            url:"/database/postgres/crash?id=3",
-            success:function (data) {
-                alert("success");
-            },
-            error:function () {
-                alert("error");
-            }
-        });
-    }
+
 
     function myfun2() {
         $.ajax({

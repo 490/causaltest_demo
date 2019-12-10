@@ -47,7 +47,6 @@ public class CassandraController {
             logger.info(result);
             model.addAttribute("result",result);
             configFile.redeploy();
-
         }
         return "cassandra";
     }

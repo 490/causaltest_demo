@@ -28,7 +28,6 @@ public class HbaseController
     private InputStream inputStream;
     private ProcessBuilder processBuilder = new ProcessBuilder();
     private static final Logger logger = LoggerFactory.getLogger(HbaseController.class);
-    String path = "/data/zhaole/causaltest/causalwebserver/src/main/resources/conf.properties";
     @RequestMapping(value="/database/hbase")
     public String hbase(@RequestParam(value = "website",required = false) String website,
                         @RequestParam(value = "count",required = false) String count,
@@ -42,8 +41,6 @@ public class HbaseController
             logger.info(result);
             model.addAttribute("result",result);
             configFile.redeploy();
-
-
         }
 
         return "hbase";
@@ -97,7 +94,6 @@ public class HbaseController
             processBuilder.command(cmd);
             processBuilder.directory(new File("/data/zhaole/causaltest"));
             process = processBuilder.start();
-
             return "hbase";
         } catch (Exception e) {
             e.printStackTrace();

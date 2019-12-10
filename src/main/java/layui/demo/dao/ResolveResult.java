@@ -78,8 +78,8 @@ public class ResolveResult
                 Date date = new Date();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
                 sb.append("\""+simpleDateFormat.format(date)+"\"");
-                sb.append(",\"excp\":0");
-                sb.append(",\"vio\":0");
+                sb.append(",\"excp\":"+"\""+0+"\"");
+                sb.append(",\"vio\":"+"\""+0+"\"");
                 sb.append("}]");
             }
             return sb.toString();
@@ -107,7 +107,7 @@ public class ResolveResult
 
         long dtmp = d1.getTime();
 
-        while(dtmp<d2.getTime())
+        while(dtmp<=d2.getTime())
         {
             //System.out.println(dtmp);
             int expnum =0;
