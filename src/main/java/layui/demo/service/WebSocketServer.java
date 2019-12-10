@@ -34,8 +34,8 @@ public class WebSocketServer
 
         try {
             // 执行tail -f命令
-            String [] cmd={"/bin/sh","-c","tailf /data/zhaole/causaltest/result.txt"};
-            //String [] cmd={"/bin/sh","-c","tailf /home/zl/Documents/test/pingcmd.txt"};
+            //String [] cmd={"/bin/sh","-c","tailf /data/zhaole/causaltest/result.txt"};
+            String [] cmd={"/bin/sh","-c","tailf /data/zhaole/causaltest/runtimelog.txt"};
 
             process = Runtime.getRuntime().exec(cmd);
             inputStream = process.getInputStream();

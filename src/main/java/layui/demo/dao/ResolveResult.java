@@ -17,12 +17,20 @@ import java.util.*;
 @Repository
 public class ResolveResult
 {
+    public static void main(String[] args) throws Exception{
+        String lastTime = "";
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        Date d1 = df.parse(lastTime);
+        long dtmp = d1.getTime();
+        System.out.println(dtmp);
+
+    }
     public String resolve() throws IOException, ParseException
     {
        // Date date = new Date();
       //  String time = JSON.toJSONStringWithDateFormat(date, "yyyy-MM-dd HH:mm:ss.SSS");
       //  System.out.println(time);
-        String filepath = "/home/zl/Documents/test/result.txt";
+        String filepath = "/data/zhaole/causaltest/result.txt";
         FileReader fileReader = new FileReader(filepath);
 
         BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -33,6 +41,7 @@ public class ResolveResult
         List<Result> resultList = new ArrayList<Result>();
         List<Result> exceptionList = new ArrayList<Result>();
         List<Result> violationList = new ArrayList<Result>();
+        StringBuilder sb = new StringBuilder();
 
         while (line!=null)
         {
@@ -59,10 +68,34 @@ public class ResolveResult
         fileReader.close();
 
         int size = resultList.size();
+
+        if(size == 0)
+        {
+            sb.append("[");
+            for(int i = 0;i <10 ;i++)
+            {
+                sb.append("{\"tm\":");
+                Date date = new Date();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+                sb.append("\""+simpleDateFormat.format(date)+"\"");
+                sb.append(",\"excp\":0");
+                sb.append(",\"vio\":0");
+                sb.append("}]");
+            }
+            return sb.toString();
+        }
+
+
         int perGapNum = size % 10;
         //System.out.println(size+","+perGapNum);
-        String firstTime  = resultList.get(0).get_time();
-        String lastTime = resultList.get(resultList.size()-1).get_time();
+        String firstTime = "";
+        String lastTime = "";
+        if (size>0)
+        {
+             firstTime  = resultList.get(0).get_time();
+             lastTime = resultList.get(resultList.size()-1).get_time();
+        }
+
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         Date d1 = df.parse(firstTime);
@@ -106,8 +139,9 @@ public class ResolveResult
         }
         dtmp = d1.getTime();
         //System.out.println("exp:"+expList+"\n"+"vio:"+vioList);
-        StringBuilder sb = new StringBuilder();
         sb.append("[");
+        int exptmp = 0;
+        int viotmp = 0;
         for(int i = 0;i <10 ;i++)
         {
             sb.append("{\"tm\":");
@@ -115,9 +149,23 @@ public class ResolveResult
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
             sb.append("\""+simpleDateFormat.format(date)+"\"");
             sb.append(",\"excp\":");
-            sb.append("\""+expList.get(i)+"\"");
+            if(expList.size()>=i)
+            {
+                sb.append("\""+expList.get(i)+"\"");
+                exptmp = expList.get(i);
+            }
+            else{
+                sb.append("\""+exptmp+"\"");
+            }
             sb.append(",\"vio\":");
-            sb.append("\""+vioList.get(i)+"\"");
+            if(vioList.size()>=i)
+            {
+                sb.append("\""+vioList.get(i)+"\"");
+                viotmp = vioList.get(i);
+            }
+            else{
+                sb.append("\""+viotmp+"\"");
+            }
             sb.append("},");
             dtmp += diff;
         }
@@ -126,9 +174,21 @@ public class ResolveResult
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
         sb.append("\""+simpleDateFormat.format(date)+"\"");
         sb.append(",\"excp\":");
-        sb.append("\""+expList.get(10)+"\"");
+        if(expList.size()>=10)
+        {
+            sb.append("\""+expList.get(10)+"\"");
+        }
+        else{
+            sb.append("\""+exptmp+"\"");
+        }
         sb.append(",\"vio\":");
-        sb.append("\""+vioList.get(10)+"\"");
+        if(vioList.size()>=10)
+        {
+            sb.append("\""+vioList.get(10)+"\"");
+        }
+        else{
+            sb.append("\""+viotmp+"\"");
+        }
         sb.append("}");
         sb.append("]");
         return sb.toString();
